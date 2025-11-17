@@ -6,15 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Slf4j
 @Data
-@EqualsAndHashCode(of = "id")
-public class Film {
+@EqualsAndHashCode(of = "email")
+public class User {
     private Long id;
+    private String email;
+    private String login;
     private String name;
-    private String description;
-    private LocalDate releaseDate;
-    private int duration;
+    private Instant birthday;
 }
