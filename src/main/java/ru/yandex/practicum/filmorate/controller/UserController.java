@@ -38,7 +38,7 @@ public class UserController {
         }
         if (user.getName() == null || user.getName().isBlank()) {
             //throw new ConditionsNotMetException("Имя пользователя не может быть пустым");
-            user.setName(user.getEmail());
+            user.setName(user.getLogin());
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new RuntimeException("дата рождения не может быть в будущем");
