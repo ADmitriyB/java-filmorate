@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.exception.DuplicatedDataException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class UserController {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getEmail());
         }
-        if (user.getBirthday().isAfter(Instant.now())) {
+        if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new RuntimeException("дата рождения не может быть в будущем");
         }
         user.setId(getNextId());
@@ -64,17 +64,14 @@ public class UserController {
             User oldUser = users.get(newUser.getId());
             if (!(newUser.getEmail() == null || newUser.getEmail().isBlank() || !newUser.getEmail().contains("@"))) {
                 oldUser.setEmail(newUser.getEmail());
-
             }
             if (!(newUser.getLogin() == null || newUser.getLogin().isBlank() || newUser.getLogin().contains(" "))) {
                 oldUser.setLogin(newUser.getLogin());
-
             }
             if (!(newUser.getName() == null || newUser.getName().isBlank())) {
                 oldUser.setName(newUser.getName());
             }
-
-            if (newUser.getBirthday().isBefore(Instant.now())) {
+            if (newUser.getBirthday().isBefore(LocalDate.now())) {
                 oldUser.setBirthday(newUser.getBirthday());
 
 

@@ -2,17 +2,15 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.extern.slf4j.Slf4j;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
-@Slf4j
 @Data
-@EqualsAndHashCode(of = "email")
+@EqualsAndHashCode(of = {"id"})
 public class User {
     private Long id;
     private String email;
     private String login;
     private String name;
-    private Instant birthday;
+    private LocalDate birthday;
 }

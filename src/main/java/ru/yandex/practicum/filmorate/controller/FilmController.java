@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
@@ -24,7 +25,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film create(@RequestBody Film film) {
+    public Film create(@Valid @RequestBody Film film) {
         // проверяем выполнение необходимых условий
         if (film.getName() == null || film.getName().isBlank()) {
             throw new ConditionsNotMetException("название не может быть пустым");
@@ -33,7 +34,7 @@ public class FilmController {
             throw new ConditionsNotMetException("максимальная длина описания — 200 символов");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new RuntimeException("дата релиза — не раньше 28 декабря 1895 года");
+            throw new ConditionsNotMetException("дата релиза — не раньше 28 декабря 1895 года");
         }
         if (film.getDuration() <= 0) {
             throw new ConditionsNotMetException("продолжительность фильма должна быть положительным числом");
@@ -43,6 +44,8 @@ public class FilmController {
 
         // сохраняем новую публикацию в памяти приложения
         films.put(film.getId(), film);
+        log.info("Film {} with id = {} was added", film.getName(), film.getId());
+
         return film;
     }
 
@@ -57,7 +60,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film update(@RequestBody Film newFilm) {
+    public Film update(@Valid @RequestBody Film newFilm) {
         if (newFilm.getId() == null) {
             throw new ConditionsNotMetException("Id должен быть указан");
         }
@@ -78,8 +81,8 @@ public class FilmController {
             if (newFilm.getDuration() > 0) {
                 oldFilm.setDuration(newFilm.getDuration());
 
-
             }
+            log.info("Film with id = {} was updated", newFilm.getId());
             return oldFilm;
         } else {
             throw new NotFoundException("Film с id = " + newFilm.getId() + " не найден");
