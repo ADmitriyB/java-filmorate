@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User create(@Valid @RequestBody User user) {
         if (user.getEmail() == null || user.getEmail().isBlank() || !user.getEmail().contains("@")) {
             throw new ConditionsNotMetException("Имейл должен быть указан и содержать символ @");
         }
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@RequestBody User newUser) {
+    public User update(@Valid @RequestBody User newUser) {
         if (newUser.getId() == null) {
             throw new ConditionsNotMetException("Id должен быть указан");
         }
