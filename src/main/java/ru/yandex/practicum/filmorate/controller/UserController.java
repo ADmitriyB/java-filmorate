@@ -48,11 +48,6 @@ public class UserController {
         return user;
     }
 
-    private long getNextId() {
-        long currentMaxId = users.keySet().stream().mapToLong(id -> id).max().orElse(0);
-        return ++currentMaxId;
-    }
-
     @PutMapping
     public User update(@Valid @RequestBody User newUser) {
         if (newUser.getId() == null) {
@@ -82,6 +77,16 @@ public class UserController {
         } else {
             throw new NotFoundException("Пост с id = " + newUser.getId() + " не найден");
         }
+    }
+
+    // вспомогательный метод для генерации идентификатора нового поста
+    private long getNextId() {
+        long currentMaxId = users.keySet()
+                .stream()
+                .mapToLong(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
     }
 }
 

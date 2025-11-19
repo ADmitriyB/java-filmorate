@@ -49,16 +49,6 @@ public class FilmController {
         return film;
     }
 
-    // вспомогательный метод для генерации идентификатора нового поста
-    private long getNextId() {
-        long currentMaxId = films.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
-    }
-
     @PutMapping
     public Film update(@Valid @RequestBody Film newFilm) {
         if (newFilm.getId() == null) {
@@ -87,5 +77,15 @@ public class FilmController {
         } else {
             throw new NotFoundException("Film с id = " + newFilm.getId() + " не найден");
         }
+    }
+
+    // вспомогательный метод для генерации идентификатора нового поста
+    private long getNextId() {
+        long currentMaxId = films.keySet()
+                .stream()
+                .mapToLong(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
     }
 }
