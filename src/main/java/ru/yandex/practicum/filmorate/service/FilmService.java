@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.exception.FilmLikeException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Comparator;
@@ -18,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FilmService extends InMemoryFilmStorage {
+public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
     private final Comparator<Film> filmLikesComparator = Comparator.comparing((Film film) -> film.getUserIdsLikes().size());

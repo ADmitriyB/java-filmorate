@@ -36,7 +36,9 @@ public class InMemoryUserStorage implements UserStorage {
         }
         user.setId(getNextId());
         users.put(user.getId(), user);
+        System.out.println("Количество пользователей: " + users.size() + getAllUsers());
         return user;
+
     }
 
     @Override

@@ -1,11 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FriendshipException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.HashSet;
@@ -13,13 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Primary
+
 @Service
 @RequiredArgsConstructor
-public class UserService extends InMemoryUserStorage {
+public class UserService {
     private final UserStorage userStorage;
 
     public Map<String, String> startFriendship(Long user1Id, Long user2Id) {
+
         Set<Long> user1Friends = new HashSet<>(userStorage.findUserById(user1Id).getFriends());
         Set<Long> user2Friends = new HashSet<>(userStorage.findUserById(user2Id).getFriends());
         if (isAlreadyFriends(user1Friends, user2Id) || isAlreadyFriends(user2Friends, user1Id) || user1Id.equals(user2Id)) {
