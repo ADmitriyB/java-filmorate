@@ -19,16 +19,16 @@ import java.util.Map;
 public class FilmController {
 
     private final FilmService filmService;
-    private final FilmStorage filmStorage;
+
 
     @GetMapping
     public Collection<Film> getAllFilms() {
-        return filmStorage.getAllFilms();
+        return filmService.getAllFilms();
     }
 
     @GetMapping("/{id}")
     public Film findFilmById(@PathVariable long id) {
-        return filmStorage.findFilmById(id);
+        return filmService.findFilmById(id);
     }
 
     @GetMapping("/popular")
@@ -38,12 +38,12 @@ public class FilmController {
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody Film film) {
-        return filmStorage.addFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film newFilm) {
-        return filmStorage.updateFilm(newFilm);
+        return filmService.updateFilm(newFilm);
     }
 
     @PutMapping("/{filmId}/like/{userId}")

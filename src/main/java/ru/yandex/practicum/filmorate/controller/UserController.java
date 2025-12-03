@@ -19,16 +19,15 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final UserStorage userStorage;
 
     @GetMapping
     public Collection<User> getAllUsers() {
-        return userStorage.getAllUsers();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     public User findUserById(@PathVariable long id) {
-        return userStorage.findUserById(id);
+        return userService.findUserById(id);
     }
 
     @GetMapping("/{id}/friends")
@@ -46,12 +45,12 @@ public class UserController {
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {
-        return userStorage.addUser(user);
+        return userService.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User newUser) {
-        return userStorage.updateUser(newUser);
+        return userService.updateUser(newUser);
     }
 
     @PutMapping("/{id}/friends/{friendId}")

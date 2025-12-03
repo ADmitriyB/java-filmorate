@@ -6,16 +6,29 @@ import ru.yandex.practicum.filmorate.exception.FriendshipException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
+
+    public User addUser(User user) {
+        return userStorage.addUser(user);
+    }
+
+    public User updateUser(User newUser) {
+        return userStorage.updateUser(newUser);
+    }
+
+    public Collection<User> getAllUsers() {
+        return userStorage.getAllUsers();
+    }
+
+    public User findUserById(long id) {
+        return userStorage.findUserById(id);
+    }
 
     public Map<String, String> startFriendship(Long user1Id, Long user2Id) {
 
