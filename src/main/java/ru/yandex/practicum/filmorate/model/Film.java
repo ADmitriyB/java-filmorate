@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,11 +14,14 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(of = {"name", "releaseDate"})
 public class Film {
-    private Long id;
+    private Integer id;
     private String name;
     private String description;
-    private LocalDate releaseDate;
     private Integer duration;
-    private Set<Long> userIdsLikes = new HashSet<>();
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate releaseDate;
+    private Integer mpaId;
+    private Integer genreId;
+    private Set<Integer> userIdsLikes = new HashSet<>();
 
 }
