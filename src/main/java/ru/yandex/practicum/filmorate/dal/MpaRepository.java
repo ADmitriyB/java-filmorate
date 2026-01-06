@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class MpaRepository extends BaseRepository<Mpa>{
+public class MpaRepository extends BaseRepository<Mpa> {
 
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM mpa WHERE id = ?";
     private static final String FIND_ALL_QUERY = "SELECT * FROM mpa";
