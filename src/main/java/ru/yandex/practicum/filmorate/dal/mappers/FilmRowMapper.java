@@ -7,8 +7,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 
 @Component
 public class FilmRowMapper implements RowMapper<Film> {
