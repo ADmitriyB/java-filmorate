@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class FilmLikeException extends RuntimeException {
-    private final long filmId;
-    private final long userId;
+    private final Integer filmId;
+    private final Integer userId;
 }
