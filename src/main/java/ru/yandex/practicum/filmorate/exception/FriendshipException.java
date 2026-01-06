@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequiredArgsConstructor
 @ResponseStatus(HttpStatus.OK)
 public final class FriendshipException extends RuntimeException {
-    private final Long user1Id;
-    private final Long user2Id;
+    private final Integer user1Id;
+    private final Integer user2Id;
 }

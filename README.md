@@ -1,2 +1,3 @@
 # java-filmorate
-Template repository for Filmorate project.
+
+![dbdiagram](./dbdiagram.png)

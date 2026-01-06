@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
-    private final Map<Long, Film> films = new HashMap<>();
+    private final Map<Integer, Film> films = new HashMap<>();
 
     @Override
     public Film addFilm(Film film) {
@@ -44,7 +44,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void removeFilm(long filmId) {
+    public void removeFilm(Integer filmId) {
         films.remove(filmId);
     }
 
@@ -79,7 +79,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film findFilmById(long filmId) {
+    public Film findFilmById(Integer filmId) {
             if (films.containsKey(filmId)) {
                 return films.get(filmId);
             }
@@ -119,10 +119,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     // вспомогательный метод для генерации идентификатора нового поста
-    private long getNextId() {
-        long currentMaxId = films.keySet()
+    private Integer getNextId() {
+        int currentMaxId = films.keySet()
                 .stream()
-                .mapToLong(id -> id)
+                .mapToInt(id -> id)
                 .max()
                 .orElse(0);
         return ++currentMaxId;

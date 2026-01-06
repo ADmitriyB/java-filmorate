@@ -14,7 +14,7 @@ import java.util.*;
 @Component
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
-    private final Map<Long, User> users = new HashMap<>();
+    private final Map<Integer, User> users = new HashMap<>();
 
     @Override
     public User addUser(User user) {
@@ -42,7 +42,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void removeUser(long userId) {
+    public void removeUser(Integer userId) {
         users.remove(userId);
     }
 
@@ -78,7 +78,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User findUserById(long userId) {
+    public User findUserById(Integer userId) {
         if (users.containsKey(userId)) {
             return users.get(userId);
         }
@@ -118,10 +118,10 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     // вспомогательный метод для генерации идентификатора нового поста
-    private long getNextId() {
-        long currentMaxId = users.keySet()
+    private Integer getNextId() {
+        int currentMaxId = users.keySet()
                 .stream()
-                .mapToLong(id -> id)
+                .mapToInt(id -> id)
                 .max()
                 .orElse(0);
         return ++currentMaxId;

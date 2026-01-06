@@ -1,80 +1,71 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.FriendshipException;
+import ru.yandex.practicum.filmorate.dal.UserRepository;
+import ru.yandex.practicum.filmorate.dal.mappers.UserRowMapper;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
+import ru.yandex.practicum.filmorate.dto.NewUserRequest;
+import ru.yandex.practicum.filmorate.dto.UpdateUserRequest;
+import ru.yandex.practicum.filmorate.dto.UserDto;
+import ru.yandex.practicum.filmorate.exception.ConditionsNotMetException;
+import ru.yandex.practicum.filmorate.exception.DuplicatedDataException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.mapper.FilmMapper;
+import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
-    private final UserStorage userStorage;
+    private final UserRepository userRepository;
 
-    public User addUser(User user) {
-        return userStorage.addUser(user);
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public User updateUser(User newUser) {
-        return userStorage.updateUser(newUser);
-    }
-
-    public Collection<User> getAllUsers() {
-        return userStorage.getAllUsers();
-    }
-
-    public User findUserById(long id) {
-        return userStorage.findUserById(id);
-    }
-
-    public Map<String, String> startFriendship(Long user1Id, Long user2Id) {
-
-        Set<Long> user1Friends = new HashSet<>(userStorage.findUserById(user1Id).getFriends());
-        Set<Long> user2Friends = new HashSet<>(userStorage.findUserById(user2Id).getFriends());
-        if (isAlreadyFriends(user1Friends, user2Id) || isAlreadyFriends(user2Friends, user1Id) || user1Id.equals(user2Id)) {
-            throw new FriendshipException(user1Id, user2Id);
+    public UserDto createUser(NewUserRequest request) {
+        if (request.getEmail() == null || request.getEmail().isEmpty()) {
+            throw new ConditionsNotMetException("Имейл должен быть указан");
         }
-        user1Friends.add(user2Id);
-        userStorage.findUserById(user1Id).setFriends(user1Friends);
-        user2Friends.add(user1Id);
-        userStorage.findUserById(user2Id).setFriends(user2Friends);
-        return Map.of("result", String.format("Пользователи с id %d и %d добавили друг друга в друзья.", user1Id, user2Id));
-    }
 
-    public Map<String, String> endFriendship(Long user1Id, Long user2Id) {
-        Set<Long> user1Friends = new HashSet<>(userStorage.findUserById(user1Id).getFriends());
-        Set<Long> user2Friends = new HashSet<>(userStorage.findUserById(user2Id).getFriends());
-        if (!(isAlreadyFriends(user1Friends, user2Id) || isAlreadyFriends(user2Friends, user1Id)) || user1Id.equals(user2Id)) {
-            throw new FriendshipException(user1Id, user2Id);
+
+        Optional<User> alreadyExistUser = userRepository.findByEmail(request.getEmail());
+        if (alreadyExistUser.isPresent()) {
+            throw new DuplicatedDataException("Данный имейл уже используется");
         }
-        user1Friends.remove(user2Id);
-        userStorage.findUserById(user1Id).setFriends(user1Friends);
-        user2Friends.remove(user1Id);
-        userStorage.findUserById(user2Id).setFriends(user2Friends);
-        return Map.of("result", String.format("Пользователи с id %d и %d удалили друг друга из друзей.", user1Id, user2Id));
+
+        User user = UserMapper.mapToUser(request);
+
+        user = userRepository.save(user);
+
+        return UserMapper.mapToUserDto(user);
     }
 
-    public List<User> getUserFriends(long userId) {
-        final User currentUser = userStorage.findUserById(userId);
-        return userStorage.getAllUsers().stream()
-                .filter(user -> currentUser.getFriends().contains(user.getId()))
-                .toList();
-    }
-
-    public List<User> getCommonFriends(Long user1Id, Long user2Id) {
-        final Set<Long> user1Friends = new HashSet<>(userStorage.findUserById(user1Id).getFriends());
-        final Set<Long> user2Friends = new HashSet<>(userStorage.findUserById(user2Id).getFriends());
-
-        return userStorage.getAllUsers().stream()
-                .filter(user -> user1Friends.contains(user.getId()) && user2Friends.contains(user.getId()))
-                .toList();
+    public UserDto getUserById(Integer userId) {
+        return userRepository.findById(userId)
+                .map(UserMapper::mapToUserDto)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден с ID: " + userId));
     }
 
 
-    private boolean isAlreadyFriends(Set<Long> user1Friends, Long user2Id) {
-        return user1Friends.contains(user2Id);
+    public Collection<UserDto> getUsers() {
+        return userRepository.findAll().stream()
+                .map(UserMapper::mapToUserDto)
+                .collect(Collectors.toList());
+    }
+
+    public UserDto updateUser(UpdateUserRequest request) {
+        User updatedUser = userRepository.findById(request.getId())
+                .map(user -> UserMapper.updateUserFields(user, request))
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        updatedUser = userRepository.update(updatedUser);
+        return UserMapper.mapToUserDto(updatedUser);
     }
 }
