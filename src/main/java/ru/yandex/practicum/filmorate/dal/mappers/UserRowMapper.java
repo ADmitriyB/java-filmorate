@@ -9,8 +9,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 
 @Slf4j
 @Component
