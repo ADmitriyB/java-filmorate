@@ -23,7 +23,7 @@ public class NewFilmRequest {
 
     @Data
     public static class Mpa {
-        private Integer MpaId;
+        private Integer mpaId;
     }
 
     @Data
